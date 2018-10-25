@@ -24,12 +24,12 @@ Output files:
 Next step is computing of genome complexity.
 To do this type in terminal:
 
-`python start_computing.py -i prefix.sif -o [path to output folder] --reference_stamm [name of reference strain]`
+`python start_computing.py -i prefix.sif -o [path to output folder] --reference [name of reference genome]`
 
 Additional parameters are:
 * ` --window ` - window size (default 20)
 * ` --iterations ` - number of iterations in probabilistic method(default is 500)
-* ` --names ` - path to file with names list (default all names from *.sif will be used)
+* ` --genomes_list ` - path to file with names list (default all names from *.sif will be used)
 * ` --min_depth, --max_depth ` - minimum and maximum depth of generated paths in graph (default from 0 to inf)
 * ` --save_db ` - path to database, created by orthfinder_parse.py (default data dont saved to db, only to txt)
 
