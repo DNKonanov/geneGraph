@@ -5,6 +5,7 @@ Tool for genome complexity computing
 ## Dependencies
 
 * Python 3.5 or later
+* Graphviz and pygraphviz libraries
 * gene_graph_lib
 
     You can install gene_graph_lib with `pip install gene_graph_lib`
@@ -16,17 +17,17 @@ To do this open `source` directory and type in terminal:
 ` python orthofinder_parse.py -i [path to txt file] -o [path and name prefix for output files] `
 
 Output files:
-* **prefix.sif** - all edges list of genome graph
-* **prefix_freq.sif** - all edges frequency
-* **prefix.db** - database with all parsed informmation
-* **prefix_context.sif** - number of contexts, computed for each node in graph
+* **graph.sif** - all edges list of genome graph
+* **graph_freq.sif** - all edges frequency
+* **graph.db** - database with all parsed informmation
+* **graph_context.sif** - number of contexts, computed for each node in graph
 
 Next step is computing of genome complexity.
 To do this type in terminal:
 
-`python start_computing.py -i prefix.sif -o [path to output folder] --reference [name of reference genome]`
+`python start_computing.py -i graph.sif -o [path to output folder] --reference [name of reference genome]`
 
-Additional parameters are:
+Additional parameters:
 * ` --window ` - window size (default 20)
 * ` --iterations ` - number of iterations in probabilistic method(default 500)
 * ` --genomes_list ` - path to file with names list (default all names from *.sif will be used)
@@ -45,7 +46,7 @@ Output files for each contig in reference genome:
 
 ## Generating of subgraph
 
-Okay, we computed complexity for each gene in our reference genome. Let's suppose that we found some interesting node and we want to observe its context. We developed script which allows us to draw small part of genomes graph. But current ` prefix.sif ` file content information about full graph with too many nodes and edges to draw. 
+Okay, we computed complexity for each gene in our reference genome. Let's suppose that we found some interesting node and we want to observe its context. We developed script which allows us to draw small part of genomes graph. But current ` graph.sif ` file content information about full graph with too many nodes and edges to draw. 
 So, to generate small part of graph you need `generate_subgraph.py` script.
 
 Common usage is
@@ -70,3 +71,6 @@ This script generate:
 * subgraph_img.ps file as image and 
 * subgraph_img.dot file with DOT description of subgraph (DOT is popular graph structure description language)
 
+Additional parameters:
+* ` --freq_min` - minimal edge frequency to draw. Edge frequency is number of genomes with this edge.
+* ` --da` - legacy parameter. Draws all edges in any case, but if edge frequency < ` --freq_min`, edge doesnt influence to graph layout.
