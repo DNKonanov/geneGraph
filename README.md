@@ -12,6 +12,8 @@ Tool for genome complexity computing
 
 ## Usage
 
+### Generating of graph structure
+
 If you have not sif file with graph stucture, the first step is parsing of Orthofinder outputs.
 To do this open `source` directory and type in terminal:
 ` python orthofinder_parse.py -i [path to txt file] -o [path and name prefix for output files] `
@@ -21,6 +23,9 @@ Output files:
 * **graph_freq.sif** - all edges frequency
 * **graph.db** - database with all parsed informmation
 * **graph_context.sif** - number of contexts, computed for each node in graph
+
+
+### Complexity computing
 
 Next step is computing of genome complexity.
 To do this type in terminal:
@@ -44,7 +49,7 @@ Output files for each contig in reference genome:
 * prob_window_variability_contig_n.txt
 * prob_all_bridges_contig_n.txt
 
-## Generating of subgraph
+### Generating of subgraph
 
 Okay, we computed complexity for each gene in our reference genome. Let's suppose that we found some interesting node and we want to observe its context. We developed script which allows us to draw small part of genomes graph. But current ` graph.sif ` file content information about full graph with too many nodes and edges to draw. 
 So, to generate small part of graph you need `generate_subgraph.py` script.
@@ -61,7 +66,7 @@ Additional parameters:
 * ` --tails ` - if derivating path too long, it will be replaced by left and right "tails". This parameter is tails length (default 5)
 * ` --names_list ` - path to file with names list (default all names from *.sif will be used)
 
-## Graph drawing
+### Graph drawing
 
 Now we can to run drawing of our mini-graph. Let's go to the `recombinatin_draw` directory in geneGraph folder and type in terminal:
 
