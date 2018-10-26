@@ -58,7 +58,7 @@ Common usage is
 
 `python generate_subgraph.py -i graph.sif -o subgraph --reference [name of reference genome] --start [name of start node] --end [name of end node]`
 
-This command generate subgraph `subgraph.sif`, built from START......END simple chain of nodes in reference.
+This command generates subgraph `subgraph.sif`, built from START......END simple chain of nodes in reference.
 
 Additional parameters:
 * ` --window ` - number of nodes, added to left and right side of refernce chain (default 20)
