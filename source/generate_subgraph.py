@@ -8,7 +8,7 @@ print('GENE0001 GENE0002 NameOfOrganism1\t(divided by space)\n...\nGENE3999 GENE
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input_file', default='no', type=str, help='input_file')
 parser.add_argument('-o', '--outfile', default='subgraph', help='out file prefix')
-parser.add_argument('--reference_stamm', type=str, default='auto', help='name of reference stamm')
+parser.add_argument('--reference', type=str, default='auto', help='name of reference genome')
 parser.add_argument('--window', type=int, default=20, help='Size of window (default is 20)')
 parser.add_argument('--start', type=str, default=None, help='start og for subgraph generating')
 parser.add_argument('--end', type=str, default=None, help='end og for subgraph generating')
@@ -22,7 +22,7 @@ graph = GenomeGraph()
 graph.read_graph(args.input_file)
 
 
-subgraph, aim_chain = graph.generate_subgraph(args.start, args.end, reference=args.reference_stamm, window=args.window, tails=args.tails, depth=args.depth)
+subgraph, aim_chain = graph.generate_subgraph(args.start, args.end, reference=args.reference, window=args.window, tails=args.tails, depth=args.depth)
 f_out = open(args.outfile + '.sif', '+a')
 f_freq = open(args.outfile + '_freq.sif', '+a')
 
@@ -40,7 +40,7 @@ for stamm in subgraph:
 				pass
 
 			try:
-				if subgraph[args.reference_stamm][0].index(contig[i + 1]) - subgraph[args.reference_stamm][0].index(contig[i]) == 1:
+				if subgraph[args.reference][0].index(contig[i + 1]) - subgraph[args.reference][0].index(contig[i]) == 1:
 					is_ref = 1
 			except ValueError:
 				pass

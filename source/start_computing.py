@@ -26,12 +26,12 @@ except FileNotFoundError:
     os.mkdir(args.output_dir)
 
 f_params = open(args.output_dir + '/params.txt', 'a+')
-f_params.write('reference: ' + args.reference_stamm + '\n')
+f_params.write('reference: ' + args.reference + '\n')
 f_params.write('window: ' + str(args.window) + '\n')
 f_params.write('iterations: ' + str(args.iterations) + '\n')
 
 graph = GenomeGraph()
 
 graph.read_graph(args.input_file, names_list=args.names_list)
-graph.compute_variability(args.output_dir, args.reference_stamm, window=args.window, iterations=args.iterations, min_depth=args.min_depth, max_depth=args.max_depth, save_db=args.save_db)
+graph.compute_variability(args.output_dir, args.reference, window=args.window, iterations=args.iterations, min_depth=args.min_depth, max_depth=args.max_depth, save_db=args.save_db)
 
