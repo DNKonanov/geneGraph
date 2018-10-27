@@ -14,7 +14,7 @@ Tool for genome complexity computing
 
 ### Generating of graph structure
 
-If you have not sif file with graph stucture, the first step is parsing of Orthofinder outputs.
+If you don't have sif file with graph stucture, the first step is parsing of Orthofinder outputs.
 To do this open `source` directory and type in terminal:
 ` python orthofinder_parse.py -i [path to txt file] -o [path and name prefix for output files] `
 
