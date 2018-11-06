@@ -150,6 +150,9 @@ for name in graph:
 	cursor.execute('INSERT INTO stamms_table VALUES (' + str(stamm_key) + ',"' + name + '")')
 	for contig in graph[name]:
 		
+		if len(graph[name][contig]) < 2:
+			continue
+			
 		cursor.execute('INSERT INTO contigs_table VALUES (' + str(contig_key) + ',' + str(stamm_key) + ',"' + str(contig) + '")')
 		
 		for i in range(len(graph[name][contig])):
