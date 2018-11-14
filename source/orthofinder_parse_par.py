@@ -96,6 +96,10 @@ for name in graph:
 
 				length = 1
 				try:
+					
+					if gene - 2 < 0:
+						f = 1/0
+
 					context_left = graph[name][contig][gene - 1]
 					start_par_coord = full_graph[name][contig][gene - 2][1]
 

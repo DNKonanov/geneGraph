@@ -181,13 +181,13 @@ org = 0
 for new_array in base_genomes:
     
     for i in range(len(new_array) - 1):
-        out.write('OG' + str(new_array[i]) + ' OG' + str(new_array[i + 1]) + ' org' + str(org) + '\n')
+        out.write('OG' + str(new_array[i]) + ' OG' + str(new_array[i + 1]) + ' org' + str(org) + ' contig' + str(org) + '\n')
 
     org += 1
 
     
 ref = [i for i in range(5000)]
 for i in range(len(ref) - 1):
-    out.write('OG' + str(ref[i]) + ' ' + 'OG' + str(ref[i + 1]) + ' ' + 'org_ref' + '\n')
+    out.write('OG' + str(ref[i]) + ' ' + 'OG' + str(ref[i + 1]) + ' ' + 'org_ref' + ' contig_ref\n')
 
 print('Completed!')
