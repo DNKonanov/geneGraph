@@ -1,7 +1,16 @@
 from gene_graph_lib.compute_complexity import GenomeGraph
 from pickle import dump, load
 from time import time
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input_file', default='no', type=str, help='input sif file')
+parser.add_argument('-ip', default=0.5, type=float, help='intersection percent, default 0.5')
+parser.add_argument('-ad', default=5, type=int, help='max number of paths from non-edge nodes')
+parser.add_argument('-d', default=100, type=int, help='N value')
+parser.add_argument('-il', default=20, type=int, help='max insertion length')
+parser.add_argument('-nc', default=5, type=int, help='non conservativity of edge nodes')
+args = parser.parse_args()
 
 def find_uniq_paths(g, gene, ref, direction, depth=100):
 
@@ -220,7 +229,7 @@ def reverse_graph(graph):
     return reversed_graph   
 
 
-def find_smile_template(graph, depth=100, max_insertion_len=20, non_conservativity=5, allowed_deviating=2, insert_freq=5, filter=0.5):
+def find_smile_template(graph, depth=100, max_insertion_len=20, non_conservativity=5, allowed_deviating=2, filter=0.5):
 
     hits_sum = 0
     
@@ -271,19 +280,10 @@ def find_smile_template(graph, depth=100, max_insertion_len=20, non_conservativi
     print('SUM: ' + str(hits_sum))
 
 
-import os
-organisms = os.listdir('/home/dmitry/projects/Genome-Complexity-Browser/gcb_server/data/')
-
-
-for org in organisms:
-    if org != 'Clostridium_botulinum':
-        continue
-    print('Organism: ' + org)
-    g = GenomeGraph()
-    g.read_graph('/home/dmitry/projects/Genome-Complexity-Browser/gcb_server/data/' + org + '/' + org + '.sif', generate_freq=True)
-    #g.read_graph('model.sif', generate_freq=True)
-    find_smile_template(g, allowed_deviating=5, insert_freq=1, filter=0.5)
-    break
+print('Input file: ' + args.input_file)
+g = GenomeGraph()
+g.read_graph(args.input_file, generate_freq=True)
+find_smile_template(g, allowed_deviating=args.ad, non_conservativity=args.nc, depth=args.d, max_insertion_len=args.il, filter=args.ip)
 
 
 
