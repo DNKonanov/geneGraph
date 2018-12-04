@@ -59,15 +59,22 @@ def find_uniq_paths(g, gene, ref, direction, depth=100):
 def check_edge_weight(g, gene_1, gene_2):
     
     value1 = value2 = 0
-    for gene in g.dict_graph_freq[gene_1]:
-        if gene[0] == gene_2:
-            value1 = gene[1]
-            break
 
-    for gene in g.dict_graph_freq[gene_2]:
-        if gene[0] == gene_1:
-            value2 = gene[1]
-            break
+    try:
+        for gene in g.dict_graph_freq[gene_1]:
+            if gene[0] == gene_2:
+                value1 = gene[1]
+                break
+    except:
+        pass
+
+    try:
+        for gene in g.dict_graph_freq[gene_2]:
+            if gene[0] == gene_1:
+                value2 = gene[1]
+                break
+    except:
+        pass
 
     return(max(value1, value2))
 
@@ -114,18 +121,169 @@ def find_template(g, depth=100, insertion_len=20, weight=0.05, uniq_paths=1):
                     print(name, g.genes_decode[c[i+1]], f_hits, g.genes_decode[c[i]], r_hits)
 
 
-g = GenomeGraph()
-g.read_graph('/home/dmitry/projects/Genome-Complexity-Browser-master/gcb_server/data/Escherichia_coli/Escherichia_coli.sif', generate_freq=True)
-find_template(g, depth=20, insertion_len=50, uniq_paths=1)
+
+def check_conservativity(graph, start, end, main_chain, source, target, depth=100, filter=0.5):
+    source_index = main_chain.index(source)
+    target_index = main_chain.index(target)
+
+    is_uniq_l = 0
+    is_uniq_r = 0
+
+    conservative = 0
+    
+
+    for genome in graph.list_graph:
+        for contig in graph.list_graph[genome]:
+
+            c = graph.list_graph[genome][contig]
+
+            if start not in c or end not in c:
+                continue
+
+            start_index = c.index(start)
+            end_index = c.index(end)
+
+            for i in range(1, depth):
+                try:
+                    if c[start_index - i] in main_chain and c[start_index - i]:
+                        if abs(main_chain.index(c[start_index - i]) - source_index) < depth:
+                            is_uniq_l = 1
+                            break
+                        if abs(main_chain.index(c[start_index - i]) - target_index) < depth:
+                            is_uniq_l = 1
+                            break
+
+                except:
+                    pass
+            for i in range(1, depth):
+                try:
+                    
+                    if c[end_index + i] in main_chain and c[end_index + 1]:
+                        if abs(main_chain.index(c[end_index + i]) - source_index) < depth:
+                            is_uniq_r = 1
+                            break
+                        if abs(main_chain.index(c[end_index + i]) - target_index) < depth:
+                            is_uniq_r = 1
+                            break
+
+                except:
+                    pass
+            if max(is_uniq_l, is_uniq_r) == 0:
+                if check_intersection(graph, main_chain[source_index+1:target_index], genome, contig, filter=filter):
+                    conservative += 1
+                    
+
+                
+            is_uniq_l = 0
+            is_uniq_r = 0
+    return conservative
 
 
 
+def check_intersection(graph, insertion_seq, genome, contig, filter=0.5):
 
 
 
+    c = graph.list_graph[genome][contig]
+    if insertion_seq[0] not in c or insertion_seq[-1] not in c:
+        return False
+
+    start_index = c.index(insertion_seq[0])
+    end_index = c.index(insertion_seq[-1])
+
+    if start_index > end_index:
+        start_index, end_index = end_index, start_index
 
 
+    set_1 = set(insertion_seq)
+    set_2 = set(c[start_index:end_index + 1])
 
+
+    if len(set_1.intersection(set_2)) < 0.5 * max(len(set_2), len(set_1)):
+        return False
+
+    return True
+    
+    
+
+            
+def reverse_graph(graph):
+    reversed_graph = {}
+
+    for node in graph.dict_graph:
+        for node2 in graph.dict_graph[node]:
+            if node2 not in reversed_graph:
+                reversed_graph[node2] = [node]
+            else:
+                reversed_graph[node2].append(node) 
+
+    return reversed_graph   
+
+
+def find_smile_template(graph, depth=100, max_insertion_len=20, non_conservativity=5, allowed_deviating=2, insert_freq=5, filter=0.5):
+
+    hits_sum = 0
+    
+    reversed_graph = reverse_graph(graph)
+    for genome in graph.list_graph:
+        
+        print('Genome: ' + genome)
+        
+        for contig in graph.list_graph[genome]:
+            hits = []
+            print('\nContig: ' + contig)
+            print('Template search...')
+            c = graph.list_graph[genome][contig]
+
+            for i in range(len(c)):
+                
+                
+                for j in range(4, max_insertion_len):
+                    
+                    skipped = False
+
+                    
+
+                    if i + j >= len(c):
+                        continue
+
+                    for node in c[i+2:i + j - 1]:
+                        try:
+                            if len(graph.dict_graph[node]) > allowed_deviating or len(reversed_graph[node]) > allowed_deviating:
+                                skipped = True
+                                break
+                        except:
+                            break
+                    
+                    if skipped == True:
+                        continue
+
+                    if check_conservativity(graph, c[i+1], c[i+j-1], c, c[i], c[i+j], depth=depth, filter=filter) >= non_conservativity:
+                        hits.append((graph.genes_decode[c[i]], graph.genes_decode[c[i+j]]))
+                    
+                
+                
+            print('Hits:')
+            print(hits)
+            hits_sum += len(hits)
+        print('--------------------')
+
+    print('SUM: ' + str(hits_sum))
+
+
+import os
+organisms = os.listdir('/home/dmitry/projects/Genome-Complexity-Browser/gcb_server/data/')
+
+
+for org in organisms:
+    if org != 'Clostridium_botulinum':
+        continue
+    print('Organism: ' + org)
+    g = GenomeGraph()
+    g.read_graph('/home/dmitry/projects/Genome-Complexity-Browser/gcb_server/data/' + org + '/' + org + '.sif', generate_freq=True)
+    #g.read_graph('model.sif', generate_freq=True)
+    find_smile_template(g, allowed_deviating=5, insert_freq=1, filter=0.5)
+    break
 
 
 
