@@ -35,11 +35,11 @@ def find_uniq_paths(g, gene, ref, direction, depth=100):
             while len(path) <= depth:
                 
                 try:
-                    test = c[index]
+                    if c[index] in ref:
+                        path.append(c[index])
+                        break
+
                 except:
-                    break
-                if c[index] in ref:
-                    path.append(c[index])
                     break
 
                 path.append(c[index])
