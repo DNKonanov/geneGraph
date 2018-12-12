@@ -1,8 +1,7 @@
 import argparse
 from collections import OrderedDict
-from gene_graph_lib.create_db import Genome, Contig, NodeOG, Complexity, Edge, NodeKey
 from peewee import SqliteDatabase
-
+import sqlite3
 import manage_db
 import reverse
 from find_context import find_context
@@ -94,85 +93,136 @@ for stamm in graph:
 			coord_list[stamm][contig].reverse()
 
 
-db = SqliteDatabase(args.out_file + '.db')
+
+db_ = sqlite3.connect(args.out_file + '.db')
+c = db_.cursor()
+
+c.execute('''
+create table if not exists genomes_table(
+	genome_id integer primary key,
+	genome_code text,
+	genome_name text
+
+);''')
+
+c.execute('''
+create table if not exists contigs_table(
+	contig_id integer primary key,
+	contig_code text,
+	genome_id integer not null,
+	foreign key (genome_id) references genomes_table (genome_id)
+);''')
+
+c.execute('''
+create table if not exists nodekey (
+	node_id integer primary key,
+	node_name text
+);''')
+c.execute('''
+create table if not exists nodes_table (
+	node_id integer primary key,
+	node_name text,
+	contig_id integer not null, 
+	description text,
+	start_coord integer,
+	end_coord integer,
+	foreign key (contig_id) references contigs_table (contig_id)
+);''')
+c.execute('''
+create table if not exists complexity_table (
+	node_id integer not null,
+	contig_id integer not null,
+	window_complexity float,
+	prob_window_complexity float,
+	io_complexity integer,
+	prob_io_complexity integer,
+	window integer,
+	foreign key (node_id) references nodes_table (node_id),
+	foreign key (contig_id) references contigs_table (contig_id)
+);''')
+c.execute('''
+create table if not exists edges_table (
+	source integer not null,
+	target integer not null,
+	frequency integer,
+	genomes text,
+	foreign key (source) references nodekey (node_id),
+	foreign key (target) references nodekey (node_id)
+);''')
 
 
-for _class in [Genome, Contig, NodeOG, Complexity, Edge, NodeKey]:
-	_class._meta.database = db
 
-db.create_tables([Genome, Contig, NodeOG, Complexity, Edge, NodeKey])
 
 nodes_set = set([])
 for genome in graph:
 	for contig in graph[genome]:
-		c = graph[genome][contig]
+		chain = graph[genome][contig]
 
-		nodes_set.update(set(c))
+		nodes_set.update(set(chain))
 
 nodes_codes_query = []
 nodes_codes = {}
 node_id = 0
 for node in nodes_set:
-
-	nodes_codes_query.append({'node_id': node_id, 'node_name': node})
+	c.execute('insert into nodekey values (' + str(node_id) + ', "' + node + '")')
 	nodes_codes[node] = node_id
 	node_id += 1
 
-NodeKey.insert_many(nodes_codes_query).execute()
+db_.commit()
 
 
-
+genome_key = 0
+contig_key = 0
+node_key = 0
 for name in graph:
 
-	pw_query = []
 	print(name)
 	print('---')
-	genome_pw = Genome.create(genome_code=name, genome_name='none')
+
+	c.execute('insert into genomes_table values(' + str(genome_key) + ', "' + name + '", "none")')
 	
 	for contig in graph[name]:
 		if len(graph[name][contig]) < 2:
 			continue
 			
-		contig_pw = Contig.create(contig_code=contig, genome=genome_pw)
+		c.execute('insert into contigs_table values(' + str(contig_key) + ', "' + contig + '", ' + str(genome_key) +')')
+
 		print(contig)
 
 		for i in range(len(graph[name][contig])):
 			gene = graph[name][contig][i]
-			pw_query.append({'node_name': gene, 'contig': contig_pw, 'description': coord_table[name][gene][2], 'start_coord':coord_list[name][contig][i][0], 'end_coord': coord_list[name][contig][i][1]})
-	
+			c.execute('insert into nodes_table values(' + str(node_key) + ',"' + gene + '", ' +str(contig_key) + ', "' + coord_table[name][gene][2] + '", ' + str(coord_list[name][contig][i][0]) + ', ' + str(coord_list[name][contig][i][1]) + ')')
+
 
 			if i == len(graph[name][contig]) - 1:
+				node_key += 1
 				continue
 			line = graph[name][contig][i] + ' ' + graph[name][contig][i + 1] + ' ' + name + ' ' + contig + '\n'
 			out.write(line)
-			
-	NodeOG.insert_many(pw_query).execute()
-	
+			node_key += 1
+		contig_key += 1		
+	genome_key += 1
 
-genomes_codes = {g.genome_code: g. genome_id for g in Genome.select()}
 
 freq = {}
 for genome in graph:
 	for contig in graph[genome]:
-		c = graph[genome][contig]
+		chain = graph[genome][contig]
 
-		for i in range(len(c) - 1):
-			if (c[i], c[i+1]) not in freq:
-				freq[(c[i], c[i+1])] = [genome]
+		for i in range(len(chain) - 1):
+			if (chain[i], chain[i+1]) not in freq:
+				freq[(chain[i], chain[i+1])] = [genome]
 
 			else:
-				freq[(c[i], c[i+1])].append(genome)
+				freq[(chain[i], chain[i+1])].append(genome)
 
 edges_query = []
 
 
-step = 1
 for edge in freq:
-	if step%1000 == 0:
-		Edge.insert_many(edges_query).execute()
-		edges_query = []
 	edges_query.append({'source': nodes_codes[edge[0]], 'target': nodes_codes[edge[1]], 'frequency': len(freq[edge]), 'genomes': '\n'.join(freq[edge])})
+	c.execute('insert into edges_table values(' + str(nodes_codes[edge[0]]) + ', ' + str(nodes_codes[edge[1]]) + ', ' + str(len(freq[edge])) + ', "' + '\n'.join(freq[edge]) + '")')
 
-	step += 1
 
-Edge.insert_many(edges_query).execute()
+db_.commit()
+db_.close()
