@@ -204,7 +204,7 @@ create table if not exists nodes_table (
 	foreign key (contig_id) references contigs_table (contig_id)
 );''')
 c.execute('''
-create table if not exists complexity (
+create table if not exists complexity_table (
 	node_id integer not null,
 	contig_id integer not null,
 	window_complexity float,
