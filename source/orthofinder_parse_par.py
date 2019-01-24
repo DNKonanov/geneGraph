@@ -127,6 +127,14 @@ for name in graph:
 					if context_left in i and context_right in i:
 
 						new_name = 'P' + graph[name][contig][gene][1:] + '_' + str(i[2])
+
+						if new_name in fixed_contig:
+							copy = 0
+							while new_name + '_copy' + str(copy) not in new_name:
+								copy += 1
+
+							new_name = new_name + '_copy' + str(copy)
+
 						fixed_contig.append(new_name)
 						coord_list[name][contig].append((start_par_coord, end_par_coord))
 						length_table[name].update([(new_name, length_table[name][graph[name][contig][gene]])])
