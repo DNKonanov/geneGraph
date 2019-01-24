@@ -80,6 +80,7 @@ for name in graph:
 paralogues_table = {pg:[] for pg in G}
 coord_list = {}
 for name in graph:
+	print(name)
 	coord_list[name] = {}
 	for contig in graph[name]:
 		
@@ -130,7 +131,7 @@ for name in graph:
 
 						if new_name in fixed_contig:
 							copy = 0
-							while new_name + '_copy' + str(copy) not in new_name:
+							while new_name + '_copy' + str(copy) in fixed_contig:
 								copy += 1
 
 							new_name = new_name + '_copy' + str(copy)
