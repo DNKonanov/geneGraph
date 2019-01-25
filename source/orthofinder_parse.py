@@ -170,12 +170,13 @@ for node in nodes_set:
 
 db_.commit()
 
+out_coord = open(args.out_file + '_genes.sif', 'a+')
+out_coord.write('genome\tcontig\tgene\tstart\tend\tdescription\n')
 
 genome_key = 0
 contig_key = 0
 node_key = 0
 for name in graph:
-
 	print(name)
 	print('---')
 
@@ -192,7 +193,7 @@ for name in graph:
 		for i in range(len(graph[name][contig])):
 			gene = graph[name][contig][i]
 			c.execute('insert into nodes_table values(' + str(node_key) + ',"' + gene + '", ' +str(contig_key) + ', "' + coord_table[name][gene][2] + '", ' + str(coord_list[name][contig][i][0]) + ', ' + str(coord_list[name][contig][i][1]) + ')')
-
+			out_coord.write(name + '\t' +contig + '\t' + gene + '\t' + str(coord_list[name][contig][i][0]) + '\t' + str(coord_list[name][contig][i][1]) + '\t' + coord_table[name][gene][2] + '\n')
 
 			if i == len(graph[name][contig]) - 1:
 				node_key += 1
@@ -203,7 +204,8 @@ for name in graph:
 		contig_key += 1		
 	genome_key += 1
 
-
+out_coord.close()
+out.close()
 freq = {}
 for genome in graph:
 	for contig in graph[genome]:
