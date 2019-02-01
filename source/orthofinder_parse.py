@@ -1,8 +1,6 @@
 import argparse
 from collections import OrderedDict
-from peewee import SqliteDatabase
 import sqlite3
-import manage_db
 import reverse
 from find_context import find_context
 
