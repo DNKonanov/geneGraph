@@ -56,7 +56,6 @@ for og in og_context:
 
 
 out = open(args.out_file + '.sif', 'a+')
-out_freq = open(args.out_file + '_freq.sif', 'a+')
 
 
 coord_list = {}

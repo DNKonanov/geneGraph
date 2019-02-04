@@ -55,7 +55,6 @@ for name in full_graph:
 
 
 out = open(args.out_file + '.sif', 'a+')
-out_freq = open(args.out_file + '_freq.sif', 'a+')
 
 
 edges = []
