@@ -1,28 +1,38 @@
 # geneGraph
 
-Tool for genome complexity computing
+Command-line tool for genome complexity computing
 
 ## Dependencies
 
-* Python 3.5 or later
+* Python 3.4 or later
 * Graphviz and pygraphviz libraries
-* gene_graph_lib
 
-    You can install gene_graph_lib with `pip install gene_graph_lib`
+    Can be install by
+    `sudo apt-get install graphviz python3-graphviz python3-pygraphviz`
+
+* gene_graph_lib p[ython3 module
+
+    Can be installed by  
+    `pip install gene_graph_lib`
 
 ## Usage
 
 ### Generating of graph structure
 
-If you don't have sif file with graph stucture, the first step is parsing of Orthofinder outputs.
+If you don't have a sif file with graph stucture, the first step is parsing of Orthofinder outputs.
 To do this open `source` directory and type in terminal:
-` python orthofinder_parse.py -i [path to txt file] -o [path and name prefix for output files] `
+` python orthofinder_parse.py -i [path to txt file with orthogroups] -o [path and name prefix for output files] `
+
+For example:
+`python orthofinder_parse.py -i ~/data/Mycoplasma/Results/Orthogroups.txt -o ~/data/outputs/Mycoplasma/graph`
 
 Output files:
 * **graph.sif** - all edges list of genome graph
 * **graph_freq.sif** - all edges frequency
-* **graph.db** - database with all parsed informmation
-* **graph_context.sif** - number of contexts, computed for each node in graph
+* **graph.db** - SQLite database with all parsed informmation
+* **graph_context.sif** - number of unique contexts, computed for each node in graph
+* **graph_genes.sif** - list of all genes (nodes) from all genomes, with coordinates and Prokka annotations
+
 
 
 ### Complexity computing
@@ -33,32 +43,49 @@ To do this type in terminal:
 `python start_computing.py -i graph.sif -o [path to output folder] --reference [name of reference genome]`
 
 Additional parameters:
-* ` --window ` - window size (default 20)
+* ` --window ` - sliding window size (default 20)
 * ` --iterations ` - number of iterations in probabilistic method(default 500)
 * ` --genomes_list ` - path to file with names list (default all names from *.sif will be used)
 * ` --min_depth, --max_depth ` - minimum and maximum depth of generated paths in graph (default from 0 to inf)
-* ` --save_db ` - path to database, created by orthfinder_parse.py (default data dont saved to db, only to txt)
+* ` --save_db ` - path to database, created by orthfinder_parse.py (default data will be not saved to db, only to txt)
 
 Output files for each contig in reference genome:
 * all_bridges_contig_n.txt
-* window_variability_contig_n.txt
-* main_chain_contig_n.txt
-* params.txt
-* IO_variability_table_contig_n.txt
-* prob_IO_variability_table_contig_n.txt
-* prob_window_variability_contig_n.txt
+
+This file contains information about number of deviating paths between each pair of nodes in reference genome
+
+* window_complexity_contig_n.txt
+
+Table with window complexity values for each node in reference genome
+
+* IO_complexity_table_contig_n.txt
+
+Table with number of deviating paths which start or end in this node
+
 * prob_all_bridges_contig_n.txt
+* prob_window_complexity_contig_n.txt
+* prob_IO_complexity_table_contig_n.txt
+
+These are same files with probabilistic algorithm to generate deviating paths
+
+* main_chain_contig_n.txt
+
+Just chain of nodes in reference genome
+
+* params.txt
+
+Parameters that were be used for computing (reference, iterations, window)
 
 ### Generating of subgraph
 
-Okay, we computed complexity for each gene in our reference genome. Let's suppose that we found some interesting node and we want to observe its context. We developed script which allows us to draw small part of genomes graph. But current ` graph.sif ` file content information about full graph with too many nodes and edges to draw. 
+Okay, we computed complexity for each gene in our reference genome. Let's suppose that we found some interesting node and we want to observe its context. We developed script which allows us to draw small part of genomes graph. But current `graph.sif` file content information about full graph with too many nodes and edges to draw. 
 So, to generate small part of graph you need `generate_subgraph.py` script.
 
 Common usage is
 
 `python generate_subgraph.py -i graph.sif -o subgraph --reference [name of reference genome] --start [name of start node] --end [name of end node]`
 
-This command generates subgraph `subgraph.sif`, built from START......END simple chain of nodes in reference.
+This command generates subgraph `subgraph.sif`, built on START......END simple chain of nodes in reference.
 
 Additional parameters:
 * ` --window ` - number of nodes, added to left and right side of refernce chain (default 20)
@@ -78,4 +105,20 @@ This script generate:
 
 Additional parameters:
 * ` --freq_min` - minimal edge frequency to draw. Edge frequency is number of genomes with this edge.
-* ` --da` - legacy parameter. Draws all edges in any case, but if edge frequency < ` --freq_min`, edge doesnt influence to graph layout.
+* ` --da` - legacy parameter, is not recommended to use. Draws all edges in any case, but edges wih frequency < ` --freq_min` do not influence to subgraph layout.
+
+## Links
+
+This tool is available as web-service [Genome Complexity Browser](gcb.rcpcm.org) ([link to github](https://github.com/DNKonanov/Genome-Complexity-Browser)) and as stand-alone app [GCB package](https://sourceforge.net/projects/gcb-package/) ([link to github](https://github.com/DNKonanov/GCB_package)).
+
+Genome Complexity Browser contains pre-computed complexity profiles and graph structure for more than 140 prokariotic species.
+
+GCB_package contains pre-computed complexity profiles and graph structure for Escherichia coli dataset only, and easy-to-use scripts to add your own organisms.
+
+##References
+
+Will be added
+
+## API
+
+Will be added
