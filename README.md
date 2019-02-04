@@ -109,13 +109,13 @@ Additional parameters:
 
 ## Links
 
-This tool is available as web-service [Genome Complexity Browser](gcb.rcpcm.org) ([link to github](https://github.com/DNKonanov/Genome-Complexity-Browser)) and as stand-alone app [GCB package](https://sourceforge.net/projects/gcb-package/) ([link to github](https://github.com/DNKonanov/GCB_package)).
+This tool is available as web-service [Genome Complexity Browser](http://gcb.rcpcm.org) ([link to github](https://github.com/DNKonanov/Genome-Complexity-Browser)) and as stand-alone app [GCB package](https://sourceforge.net/projects/gcb-package/) ([link to github](https://github.com/DNKonanov/GCB_package)).
 
 Genome Complexity Browser contains pre-computed complexity profiles and graph structure for more than 140 prokariotic species.
 
 GCB_package contains pre-computed complexity profiles and graph structure for Escherichia coli dataset only, and easy-to-use scripts to add your own organisms.
 
-##References
+## References
 
 Will be added
 
