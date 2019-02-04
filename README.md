@@ -28,7 +28,6 @@ For example:
 
 Output files:
 * **graph.sif** - all edges list of genome graph
-* **graph_freq.sif** - all edges frequency
 * **graph.db** - SQLite database with all parsed informmation
 * **graph_context.sif** - number of unique contexts, computed for each node in graph
 * **graph_genes.sif** - list of all genes (nodes) from all genomes, with coordinates and Prokka annotations
