@@ -46,7 +46,7 @@ Additional parameters:
 * ` --iterations ` - number of iterations in probabilistic method(default 500)
 * ` --genomes_list ` - path to file with names list (default all names from *.sif will be used)
 * ` --min_depth, --max_depth ` - minimum and maximum depth of generated paths in graph (default from 0 to inf)
-* ` --save_db ` - path to database, created by orthfinder_parse.py (default data will be not saved to db, only to txt)
+* ` --save_db ` - path to database, created by orthfinder_parse.py (default data will not be saved to db, only to txt)
 
 Output files for each contig in the reference genome:
 * all_bridges_contig_n.txt
