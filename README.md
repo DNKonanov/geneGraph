@@ -110,7 +110,7 @@ Additional parameters:
 ### Method validation
 
 To verify our method we implemented random rearrangements algorithm.
-You can carry out the validation pipeline by one command: just open `geneGraph/source/validation` folder and run `bash validate.sh` script in terminal. This short pipeline generates sinus-distribution based random rearrangements simulations and creates plot for input distribution and result complexity profile.
+You can carry out the validation pipeline by one command: just open `geneGraph/source/validation` folder and run `bash validate.sh` script in terminal. This short pipeline generates sinus-distribution based random rearrangements models and creates plot for input distribution and result complexity profile.
 
 
 ## Links
