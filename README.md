@@ -94,7 +94,7 @@ Additional parameters:
 
 ### Graph drawing
 
-Now we can to run drawing of our mini-graph. Let's go to the `recombinatin_draw` directory in the geneGraph folder and type in terminal:
+Now we can run drawing of our mini-graph. Let's go to the `recombinatin_draw` directory in the geneGraph folder and type in terminal:
 
 `python run_drawing.py -i subgraph.sif -o subgrah_img`
 
