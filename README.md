@@ -125,6 +125,3 @@ GCB_package contains pre-computed complexity profiles and graph structure for Es
 
 Will be added
 
-## API
-
-Will be added
