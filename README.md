@@ -106,6 +106,13 @@ Additional parameters:
 * ` --freq_min` - minimal edge frequency to draw. Edge frequency is number of genomes with this edge.
 * ` --da` - legacy parameter, it's not recommended to use. Draws all subgraph edges in any case, but edges wih frequency < `freq_min` do not influence to subgraph layout.
 
+
+### Method validation
+
+To verify our method we implemented random rearrangements algorithm. In this algorithm localization for each rearrangemesnt depend of user-defined distribution.
+You can carry out the validation pipeline by one command: just open `geneGraph/source/validation` folder and run `bash validate.sh` script in terminal. This short pipeline generates sinus-distribution based random rearrangements simulations and creates plot for input distribution and result complexity profile.
+
+
 ## Links
 
 This tool is available as a web-service [Genome Complexity Browser](http://gcb.rcpcm.org) ([link to github](https://github.com/DNKonanov/Genome-Complexity-Browser)) and as a stand-alone app [GCB package](https://sourceforge.net/projects/gcb-package/) ([link to github](https://github.com/DNKonanov/GCB_package)).
