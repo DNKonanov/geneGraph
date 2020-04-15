@@ -8,7 +8,8 @@ Command-line tool for genome complexity computing
 * Graphviz and pygraphviz libraries
 
     Can be installed by
-    `sudo apt-get install graphviz python3-graphviz python3-pygraphviz`
+    `sudo apt-get install graphviz python3-graphviz python3-pygraphviz` or by `conda install`
+
 
 * gene_graph_lib python3 module
 
@@ -20,11 +21,11 @@ Command-line tool for genome complexity computing
 ### Generating of graph structure
 
 If you don't have a sif file with graph stucture, the first step is parsing of Orthofinder outputs.
-To do this open `source` directory and type in terminal:
-` python orthofinder_parse.py -i [path to txt file with orthogroups] -o [path and name prefix for output files] `
+To do this run in terminal:
+` python parse_og.py -i [path to txt file with orthogroups] -o [path and name prefix for output files] `
 
 For example:
-`python orthofinder_parse.py -i ~/data/Mycoplasma/Results/Orthogroups.txt -o ~/data/outputs/Mycoplasma/graph`
+`python parse_og.py -i ~/data/Mycoplasma/Results/Orthogroups.txt -o ~/data/outputs/Mycoplasma/graph`
 
 Output files:
 * **graph.sif** - all edges list of the genomes graph
@@ -39,7 +40,7 @@ Output files:
 The next step is computing of genome complexity.
 To do this type in terminal:
 
-`python start_computing.py -i graph.sif -o [path to output folder] --reference [name of reference genome]`
+`python estimate_complexity.py -i graph.sif -o [path to output folder] --reference [name of reference genome]`
 
 Additional parameters:
 * ` --window ` - sliding window size (default 20)
@@ -96,7 +97,7 @@ Additional parameters:
 
 Now we can run drawing of our mini-graph. Let's go to the `recombinatin_draw` directory in the geneGraph folder and type in terminal:
 
-`python run_drawing.py -i subgraph.sif -o subgrah_img`
+`python plot_subgraph.py -i subgraph.sif -o subgrah_img`
 
 This script generate:
 * subgraph_img.ps file as image and 
