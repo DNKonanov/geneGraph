@@ -1,4 +1,4 @@
-import draw_graph
+from gene_graph_lib.subgraph_plotting import draw_graph
 import argparse
 
 print('Example file:\n')
@@ -49,6 +49,7 @@ genes = list(genes)
 
 
 print('Rendering...')
-draw_graph.draw_graph([genes, bonds], args.out,  ref_chain=ref_chain, aim_chain=aim_chain, freq_min=args.freq_min, draw_all=args.da)
+
+draw_graph([genes, bonds], args.out,  ref_chain=ref_chain, aim_chain=aim_chain, freq_min=args.freq_min, draw_all=args.da)
 
 print('Complete!')
