@@ -32,5 +32,5 @@ f_params.write('iterations: ' + str(args.iterations) + '\n')
 graph = GenomeGraph()
 
 graph.read_graph(args.input_file, names_list=args.genomes_list)
-graph.compute_complexity(args.output_dir, args.reference, window=args.window, iterations=args.iterations, min_depth=args.min_depth, max_depth=args.max_depth, save_db=args.save_db)
+graph.compute_complexity(args.output_dir, args.reference, window=args.window, iterations=args.iterations, min_depth=args.min_depth, max_depth=args.max_depth, save_db=args.fill_db)
 

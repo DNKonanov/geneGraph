@@ -116,11 +116,11 @@ You can carry out the validation pipeline by one command: just open `geneGraph/s
 
 ## Links
 
-This tool is available as a web-service [Genome Complexity Browser](http://gcb.rcpcm.org) ([link to github](https://github.com/DNKonanov/Genome-Complexity-Browser)) and as a stand-alone app [GCB package](https://sourceforge.net/projects/gcb-package/) ([link to github](https://github.com/DNKonanov/GCB_package)).
+This tool is available as a web-service [Genome Complexity Browser](http://gcb.rcpcm.org) ([link to github](https://github.com/DNKonanov/Genome-Complexity-Browser)) and as a stand-alone app [GCB package](https://github.com/DNKonanov/GCB_package).
 
 Genome Complexity Browser contains pre-computed complexity profiles and graph structure for more than 140 prokariotic species.
 
-GCB_package contains pre-computed complexity profiles and graph structure for Escherichia coli dataset only, and easy-to-use scripts to add your own organisms.
+GCB_package does not contain pre-computed complexity profiles, but there are easy-to-use scripts to add your own organisms in the package.
 
 ## References
 
