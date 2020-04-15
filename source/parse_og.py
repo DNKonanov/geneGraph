@@ -15,6 +15,9 @@ length_table = OrderedDict()
 coord_table = OrderedDict()
 
 
+print('Parsing... It may take a few minutes...\n')
+
+
 for line in open(args.input_file, 'r'):
 
 	OG, string = line.split(': ')[0], line.split(': ')[1][:-1]
@@ -81,16 +84,17 @@ for name in graph:
 
 		graph[name][contig] = fixed_contig.copy()
 
-graph, reversed_chains = reverse.reverse(graph, length_table)
+
+print('Reversing...\n')
+graph, reversed_chains = reverse(graph, length_table)
 
 for stamm in graph:
 	for contig in graph[stamm]:
 		if contig in reversed_chains[stamm]:
-			print(contig)
 			coord_list[stamm][contig].reverse()
 
 
-
+print('Database filling...')
 db_ = sqlite3.connect(args.out_file + '.db')
 c = db_.cursor()
 
@@ -181,9 +185,6 @@ genome_key = 0
 contig_key = 0
 node_key = 0
 for name in graph:
-	print(name)
-	print('---')
-
 	c.execute('insert into genomes_table values(' + str(genome_key) + ', "' + name + '", "none")')
 	
 	for contig in graph[name]:
@@ -191,8 +192,6 @@ for name in graph:
 			continue
 			
 		c.execute('insert into contigs_table values(' + str(contig_key) + ', "' + contig + '", ' + str(genome_key) +')')
-
-		print(contig)
 
 		for i in range(len(graph[name][contig])):
 			gene = graph[name][contig][i]
@@ -232,3 +231,6 @@ for edge in freq:
 
 db_.commit()
 db_.close()
+
+print()
+print('Complete!')

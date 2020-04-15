@@ -1,5 +1,5 @@
 import argparse
-import reverse
+from gene_graph_lib.reverse import reverse
 from collections import OrderedDict
 import sqlite3
 
@@ -12,6 +12,8 @@ args = parser.parse_args()
 full_graph = OrderedDict()
 length_table = OrderedDict()
 coord_table = OrderedDict()
+
+print('Parsing... It may take a few minutes...\n')
 
 
 for line in open(args.input_file, 'r'):
@@ -74,10 +76,11 @@ for name in graph:
 			S.add(gene)
 
 
+print('Orthologization...\n')
+
 paralogues_table = {pg:[] for pg in G}
 coord_list = {}
 for name in graph:
-	print(name)
 	coord_list[name] = {}
 	for contig in graph[name]:
 		
@@ -166,14 +169,18 @@ for name in graph:
 
 		graph[name][contig] = fixed_contig
 
-graph, reversed_chains = reverse.reverse(graph, length_table)
+
+print('Reversing...\n')
+graph, reversed_chains = reverse(graph, length_table)
 
 for name in graph:
 	for contig in graph[name]:
 		if contig in reversed_chains[name]:
-			print(contig)
 			coord_list[name][contig].reverse()
 
+
+
+print('Database filling...\n')
 
 db_ = sqlite3.connect(args.out_file + '.db')
 c = db_.cursor()
@@ -266,8 +273,6 @@ genome_key = 0
 contig_key = 0
 node_key = 0
 for name in graph:
-	print(name)
-	print('---')
 
 	c.execute('insert into genomes_table values(' + str(genome_key) + ', "' + name + '", "none")')
 	
@@ -276,8 +281,6 @@ for name in graph:
 			continue
 			
 		c.execute('insert into contigs_table values(' + str(contig_key) + ', "' + contig + '", ' + str(genome_key) +')')
-
-		print(contig)
 
 		for i in range(len(graph[name][contig])):
 			gene = graph[name][contig][i]
@@ -317,3 +320,5 @@ for edge in freq:
 
 db_.commit()
 db_.close()
+
+print('Complete!')
