@@ -173,6 +173,9 @@ for name in graph:
 print('Reversing...\n')
 graph, reversed_chains = reverse(graph, length_table)
 
+
+
+
 for name in graph:
 	for contig in graph[name]:
 		if contig in reversed_chains[name]:
