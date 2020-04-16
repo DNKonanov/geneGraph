@@ -6,7 +6,7 @@ import sqlite3
 
 
 
-def greed_collapse(graph):
+def greedy_collapse(graph):
 
 
     context_map = {}
@@ -253,7 +253,7 @@ print('Reversing...\n')
 graph, reversed_chains = reverse(graph, length_table)
 
 
-gene_replaces = greed_collapse(graph)
+gene_replaces = greedy_collapse(graph)
 
 new_graph = {}
 
