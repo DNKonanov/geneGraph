@@ -268,6 +268,9 @@ for genome in graph:
 
         for c in chain:
             try:
+                if gene_replaces[c] in new_graph[genome][contig]:
+                    new_graph[genome][contig].append(c)
+
                 new_graph[genome][contig].append(gene_replaces[c])
 
             except KeyError:
@@ -286,8 +289,20 @@ for genome in coord_table:
         if c not in gene_replaces:
             new_coord_table[genome][c] = coord_table[genome][c]
         else:
+
+            if gene_replaces[c] in new_coord_table[genome]:
+
+                if c not in new_coord_table[genome]:
+                    new_coord_table[genome][c] = coord_table[genome][c]
+
+                else:
+                    new_coord_table[genome][c] = coord_table[genome][c]
+
+                continue
             new_coord_table[genome][gene_replaces[c]] = coord_table[genome][c]
 
+
+print(len(coord_table[genome]), len(new_coord_table[genome]))
 coord_table = new_coord_table
 
 
@@ -400,8 +415,15 @@ for name in graph:
             
         c.execute('insert into contigs_table values(' + str(contig_key) + ', "' + contig + '", ' + str(genome_key) +')')
 
+        print(len(graph[name][contig]))
+        print(len(coord_table[name]))
+
         for i in range(len(graph[name][contig])):
+
+            
+
             gene = graph[name][contig][i]
+            
             c.execute('insert into nodes_table values(' + str(node_key) + ',"' + gene + '", ' +str(contig_key) + ', "' + coord_table[name][gene][2] + '", ' + str(coord_list[name][contig][i][0]) + ', ' + str(coord_list[name][contig][i][1]) + ')')
             out_coord.write(name + '\t' +contig + '\t' + gene + '\t' + str(coord_list[name][contig][i][0]) + '\t' + str(coord_list[name][contig][i][1]) + '\t' + coord_table[name][gene][2] + '\n')
 
