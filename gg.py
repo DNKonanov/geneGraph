@@ -611,6 +611,83 @@ print('Complete!')
 
 
 
+from pickle import dump
+from gene_graph_lib.compute_complexity import GenomeGraph
+import os
+import sqlite3
+
+
+f = open('scripts/strains_decode.txt')
+
+codes = {}
+
+for line in f:
+    code = line.split(' ')[-1][:-3]
+    name = ''.join(line.split(' ')[:-1])
+    codes[code] = name
+
+org = args.out_dir
+
+files = os.listdir(org + '/')
+if '.dump' not in ' '.join(files):
+	print(org, end=' ')
+	print('dumping...')
+	
+	
+	try:
+		g = GenomeGraph()
+		g.read_graph(org + '/' + org + '.sif')
+		dump_file = open(org + '/' + org + '.dump', 'wb')
+		dump(g, dump_file)
+	except:
+		pass
+
+	try:
+		g = GenomeGraph()
+		g.read_graph(org + '/' + org + '_pars.sif')
+		dump_file = open(org + '/' + org + '_pars.dump', 'wb')
+		dump(g, dump_file)
+	except:
+		pass
+
+	skip = os.path.isfile(org + '/' + org + '.db')
+
+	if skip == True:
+		connect = sqlite3.connect(org + '/' + org + '.db')
+		c = connect.cursor()
+		
+		genome_codes = [q for q in c.execute('select genome_id,genome_code from genomes_table')]
+
+		for code in genome_codes:
+			for ref_code in codes:
+				if ref_code in code[1]:
+					c.execute('update genomes_table set genome_name="' + codes[ref_code] + '" where genome_id=' + str(code[0]))
+
+		
+		connect.commit()
+		connect.close()
+
+	#pars table
+	skip = os.path.isfile( org + '/' + org + '_pars.db')
+
+	if skip == True:
+			
+		connect = sqlite3.connect(org + '/' + org + '_pars.db')
+		c = connect.cursor()
+		
+		genome_codes = [q for q in c.execute('select genome_id,genome_code from genomes_table')]
+
+		for code in genome_codes:
+			for ref_code in codes:
+				if ref_code in code[1]:
+					c.execute('update genomes_table set genome_name="' + codes[ref_code] + '" where genome_id=' + str(code[0]))
+
+		connect.commit()
+		connect.close()
+	
+
+
+
 references_list = list(graph.keys())
 if args.reference == 'auto':
 	pass
@@ -651,4 +728,7 @@ for reference in references_list:
         max_depth=args.max_depth, 
         save_db='{name}/{name}.db'.format(name=args.out_dir)
         )
+
+
+
 
