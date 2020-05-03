@@ -9,7 +9,7 @@ parser.add_argument('-i', '--input_file', default='no', type=str, help='input_fi
 parser.add_argument('-o', '--output_dir', default='STDOUT', type=str, help='Output directory')
 parser.add_argument('--reference', type=str, default='auto', help='name of reference genome', required=True)
 parser.add_argument('--window', type=int, default=20, help='Size of window (default is 20)')
-parser.add_argument('--iterations', type=int, default=500, help='number of iterations in stat computing (default is 500)')
+parser.add_argumentдесятков('--iterations', type=int, default=500, help='number of iterations in stat computing (default is 500)')
 parser.add_argument('--genomes_list', type=str, default='all', help='genomes list txt file')
 parser.add_argument('--min_depth', type=int, default=0, help='min length of deviating path (default is 0)')
 parser.add_argument('--max_depth', type=int, default=-1, help='max length of deviating path (default is inf)')
