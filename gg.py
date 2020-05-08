@@ -12,7 +12,7 @@ print('\ngeneGraph - tool to estimate genome variability\n')
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input_file', default='no', type=str, help='input_file (Orthofinder file)', required=True)
 parser.add_argument('-o', '--out_dir', type=str, help='Output directory', required=True)
-parser.add_argument('--reference', type=str, default='auto', help='name of the reference genome. Default all')
+parser.add_argument('--reference', type=str, default='all', help='name of the reference genome. Default all')
 parser.add_argument('--window', type=int, default=20, help='Size of window (default is 20)')
 parser.add_argument('--iterations', type=int, default=500, help='number of iterations in stat computing (default is 500)')
 parser.add_argument('--genomes_list', type=str, default='all', help='genomes list txt file')
@@ -20,6 +20,7 @@ parser.add_argument('--min_depth', type=int, default=0, help='min length of devi
 parser.add_argument('--max_depth', type=int, default=-1, help='max length of deviating path (default is inf)')
 
 args = parser.parse_args()
+
 
 
 graph = OrderedDict()
@@ -271,9 +272,12 @@ print()
 
 
 f_params = open(args.out_dir + '/params.txt', 'w')
-f_params.write('reference: ' + args.reference + '\n')
-f_params.write('window: ' + str(args.window) + '\n')
-f_params.write('iterations: ' + str(args.iterations) + '\n')
+
+
+for arg in args.__dict__:
+
+	f_params.write('{}: {}\n'.format(arg, args.__dict__[arg]))
+f_params.close()
 
 
 
@@ -689,7 +693,7 @@ if '.dump' not in ' '.join(files):
 
 
 references_list = list(graph.keys())
-if args.reference == 'auto':
+if args.reference == 'all':
 	pass
 
 else:
