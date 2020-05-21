@@ -18,6 +18,7 @@ parser.add_argument('--iterations', type=int, default=500, help='number of itera
 parser.add_argument('--genomes_list', type=str, default='all', help='genomes list txt file')
 parser.add_argument('--min_depth', type=int, default=0, help='min length of deviating path (default is 0)')
 parser.add_argument('--max_depth', type=int, default=-1, help='max length of deviating path (default is inf)')
+parser.add_argument('--col', default=False, type=bool, help='maximize collinearity if genomes')
 
 args = parser.parse_args()
 
@@ -104,14 +105,14 @@ for name in graph:
 
 		graph[name][contig] = fixed_contig.copy()
 
+if args.col:
+	print('Reversing...')
+	graph, reversed_chains = reverse(graph, length_table)
 
-print('Reversing...')
-graph, reversed_chains = reverse(graph, length_table)
-
-for stamm in graph:
-	for contig in graph[stamm]:
-		if contig in reversed_chains[stamm]:
-			coord_list[stamm][contig].reverse()
+	for stamm in graph:
+		for contig in graph[stamm]:
+			if contig in reversed_chains[stamm]:
+				coord_list[stamm][contig].reverse()
 
 
 print('Database filling...')
@@ -442,16 +443,17 @@ for name in graph:
 		graph[name][contig] = fixed_contig
 
 
-print('Reversing...')
-graph, reversed_chains = reverse(graph, length_table)
+if args.col:
+	print('Reversing...')
+	graph, reversed_chains = reverse(graph, length_table)
 
 
 
 
-for name in graph:
-	for contig in graph[name]:
-		if contig in reversed_chains[name]:
-			coord_list[name][contig].reverse()
+	for name in graph:
+		for contig in graph[name]:
+			if contig in reversed_chains[name]:
+				coord_list[name][contig].reverse()
 
 
 
