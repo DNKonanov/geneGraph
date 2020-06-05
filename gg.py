@@ -105,7 +105,7 @@ for name in graph:
 
 		graph[name][contig] = fixed_contig.copy()
 
-if args.col:
+if args.coalign:
 	print('Reversing...')
 	graph, reversed_chains = reverse(graph, length_table)
 
@@ -443,7 +443,7 @@ for name in graph:
 		graph[name][contig] = fixed_contig
 
 
-if args.col:
+if args.coalign:
 	print('Reversing...')
 	graph, reversed_chains = reverse(graph, length_table)
 
