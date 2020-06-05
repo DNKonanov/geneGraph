@@ -18,7 +18,7 @@ parser.add_argument('--iterations', type=int, default=500, help='number of itera
 parser.add_argument('--genomes_list', type=str, default='all', help='genomes list txt file')
 parser.add_argument('--min_depth', type=int, default=0, help='min length of deviating path (default is 0)')
 parser.add_argument('--max_depth', type=int, default=-1, help='max length of deviating path (default is inf)')
-parser.add_argument('--col', default=False, type=bool, help='maximize collinearity if genomes')
+parser.add_argument('--coalign', default=False, type=bool, help='maximize collinearity if genomes')
 
 args = parser.parse_args()
 
@@ -622,8 +622,8 @@ from gene_graph_lib.compute_complexity import GenomeGraph
 import os
 import sqlite3
 
-
-f = open('scripts/strains_decode.txt')
+abs_path = os.path.dirname(os.path.abspath(__file__))
+f = open(abs_path + '/scripts/strains_decode.txt')
 
 codes = {}
 
