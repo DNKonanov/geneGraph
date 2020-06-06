@@ -1,4 +1,4 @@
-from gene_graph_lib.subgraph_plotting import draw_graph
+from gene_graph_lib.subgraph_plotting import draw_graph, compute_frequence
 import argparse
 
 print('Example file:\n')
@@ -43,7 +43,7 @@ for i in f_in:
 ref_chain.append(last)
 
 
-bonds = draw_graph.compute_frequence(bonds)
+bonds = compute_frequence(bonds)
 genes = list(genes)
 
 

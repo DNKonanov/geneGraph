@@ -18,6 +18,23 @@ Command-line tool for genome complexity computing
 
 ## Usage
 
+The most simple way to generate graph structure and estimate complexity is `gg.py` script. The first step is the inference of orthology groups, which is described [here](https://github.com/paraslonic/orthosnake). Output is `OrthoGroups.txt` file.
+
+Now we can use `gg.py`:
+`python gg.py -i [path to OrthoGroups.txt] -o [output dir]`
+
+Output dir will be created automatically.
+NB! This command calculates complexity profiles for ALL genomes in the dataset, and may spend a lot of time. To specify only one genome you should use `--reference` parameter.
+
+Other parameters:
+* ` --window ` - sliding window size (default 20)
+* ` --iterations ` - number of iterations in probabilistic method(default 500)
+* ` --genomes_list ` - path to file with names list (default all names from *.sif will be used)
+* ` --min_depth, --max_depth ` - minimum and maximum depth of generated paths in graph (default from 0 to inf)
+* ` --coalign ` - True/False value. If True, enable maximization of genomes collinerity. Quadratically increses analysis time. Default is False. 
+
+Next sections describes parsing and complexity computing separately.
+
 ### Generating of graph structure
 
 If you don't have a sif file with graph stucture, the first step is parsing of Orthofinder outputs.
@@ -37,8 +54,7 @@ Output files:
 
 ### Complexity computing
 
-The next step is computing of genome complexity.
-To do this type in terminal:
+To compute complexity type in terminal:
 
 `python estimate_complexity.py -i graph.sif -o [path to output folder] --reference [name of reference genome]`
 
@@ -83,19 +99,23 @@ So, to generate a small part of graph you should use `generate_subgraph.py` scri
 
 Common usage is
 
-`python generate_subgraph.py -i graph.sif -o subgraph --reference [name of reference genome] --start [name of start node] --end [name of end node]`
+`python generate_subgraph.py -i graph.sif -o subgraph --reference [name of reference genome] --contig [name of contig] --start [start position] --end [end position]`
 
-This command generates subgraph `subgraph.sif`, which is connected with START......END simple chain of nodes in the reference genome.
+It's posttible to set start and end by node names directly. For this add `--inputtype byNodeID` to command:
+
+`python generate_subgraph.py -i graph.sif -o subgraph --reference [name of reference genome] --inputtype byNodeID --start [name of start node] --end [name of end node]`
+
+These commands generate subgraph `subgraph.sif`, which is connected with START......END simple chain of nodes in the reference genome.
 
 Additional parameters:
-* ` --window ` - number of nodes, added to left and right side of refernce chain (default 20)
+* ` --neighborhood ` - number of nodes, added to left and right side of refernce chain (default 20)
 * ` --depth ` - maximum length of deviating paths, which will be added to the subgraph {default is the length of the reference chain)
 * ` --tails ` - if deviating path too long, it will be replaced by left and right "tails". This parameter is tails length (default 5)
 * ` --names_list ` - path to file with list of names for subgraph generating (default all names from *.sif will be used)
 
 ### Graph drawing
 
-Now we can run drawing of our mini-graph. Let's go to the `recombinatin_draw` directory in the geneGraph folder and type in terminal:
+Now we can run drawing of our mini-graph. Just type in terminal:
 
 `python plot_subgraph.py -i subgraph.sif -o subgrah_img`
 

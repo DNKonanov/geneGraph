@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-result = pd.read_csv('sin_out/prob_window_complexity_contig_c_ref.txt', sep='\t', header=None, names = ['gene', 'complexity'])
+result = pd.read_csv('sin_out/prob_window_complexity_contig_contig_ref.txt', sep='\t')
 dist = pd.read_csv('sin', header=None, names=['freq'])
 
 fig, axs = plt.subplots(2, 1)
