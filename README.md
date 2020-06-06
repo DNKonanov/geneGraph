@@ -5,7 +5,7 @@ Command-line tool for genome complexity computing
 ## Dependencies
 
 * Python 3.4 or later
-* Graphviz and pygraphviz libraries
+* Graphviz and pygraphviz libraries (Only required for `plot_subgraph.py`. It is known that this library has installation problems, so we mention that it is not required to create complexity profiles)
 
     Can be installed by
     `sudo apt-get install graphviz python3-graphviz python3-pygraphviz` or by `conda install`
@@ -72,7 +72,7 @@ Output folder contains number of files:
 Some additional results or information is located in `extended_info` subfolder:
 
 * `extended_info/(prob_)main_chain_contig_*.txt` - simple chain of nodes in the reference
-* `extended_info/(prob_)IO_complexity_contig_*.txt` - for each node in the reference chain a number of distinct deviating paths which started from this node or returned to this node
+* `extended_info/(prob_)IO_complexity_contig_*.txt` - for each node in the reference chain a number of distinct deviating paths which started from this node or returned to this node (ignore window parameter)
 * `extended_info/(prob_)all_bridges_contig_*.txt` - number af deviating paths between all pairs of nodes from the reference chain(ignore window paramter)
 
 ### Generating of subgraph
@@ -84,7 +84,7 @@ Common usage is
 
 `python generate_subgraph.py -i graph.sif -o subgraph --reference [name of reference genome] --contig [name of contig] --start [start position] --end [end position]`
 
-It's posttible to set start and end by node names directly. For this add `--inputtype byNodeID` to command:
+It's possible to set start and end by node names directly. For this add `--inputtype byNodeID` to command:
 
 `python generate_subgraph.py -i graph.sif -o subgraph --reference [name of reference genome] --inputtype byNodeID --start [name of start node] --end [name of end node]`
 
@@ -119,7 +119,7 @@ You can carry out the validation pipeline by one command: just open `geneGraph/s
 
 ## Links
 
-This tool is available as a web-service [Genome Complexity Browser](http://gcb.rcpcm.org) ([link to github](https://github.com/DNKonanov/Genome-Complexity-Browser)) and as a stand-alone app [GCB package](https://github.com/DNKonanov/GCB_package).
+This tool is available as a web-service [Genome Complexity Browser](http://gcb.rcpcm.org) ([link to github](https://github.com/DNKonanov/Genome-Complexity-Browser)) and as a stand-alone app [GCB package](https://github.com/DNKonanov/GCB).
 
 Genome Complexity Browser contains pre-computed complexity profiles and graph structure for more than 140 prokariotic species.
 
