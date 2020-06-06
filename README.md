@@ -65,32 +65,15 @@ Additional parameters:
 * ` --min_depth, --max_depth ` - minimum and maximum depth of generated paths in graph (default from 0 to inf)
 * ` --save_db ` - path to database, created by orthfinder_parse.py (default data will not be saved to db, only to txt)
 
-Output files for each contig in the reference genome:
-* all_bridges_contig_n.txt
+Output folder contains number of files:
+* `window_complexity_contig_*.txt` - by strain calculated complexity profile
+* `prob_window_complexity_contig_*.txt` - complexity profile calculated by probabilistic approach (recommended to use)
 
-This file contains information about number of deviating paths between each pair of nodes in the reference genome
+Some additional results or information is located in `extended_info` subfolder:
 
-* window_complexity_contig_n.txt
-
-Table with window complexity values for each node in the reference genome
-
-* IO_complexity_table_contig_n.txt
-
-Table with number of deviating paths which start or end in this node
-
-* prob_all_bridges_contig_n.txt
-* prob_window_complexity_contig_n.txt
-* prob_IO_complexity_table_contig_n.txt
-
-These are the same files provided by probabilistic algorithm to generate deviating paths
-
-* main_chain_contig_n.txt
-
-Just chain of nodes in the reference genome
-
-* params.txt
-
-Parameters that were be used for computing (reference genome, iterations, window)
+* `extended_info/(prob_)main_chain_contig_*.txt` - simple chain of nodes in the reference
+* `extended_info/(prob_)IO_complexity_contig_*.txt` - for each node in the reference chain a number of distinct deviating paths which started from this node or returned to this node
+* `extended_info/(prob_)all_bridges_contig_*.txt` - number af deviating paths between all pairs of nodes from the reference chain(ignore window paramter)
 
 ### Generating of subgraph
 
