@@ -5,7 +5,7 @@ from gene_graph_lib.reverse import reverse
 from gene_graph_lib.find_context import find_context
 import numpy as np
 from gene_graph_lib.compute_complexity import GenomeGraph
-
+from os.path import splitext, basename
 
 print('\ngeneGraph - tool to estimate genome variability\n')
 
@@ -37,6 +37,10 @@ except FileNotFoundError:
     os.mkdir(args.out_dir)
 
 print('Parsing... It may take a few minutes...')
+
+
+
+orgname = basename(splitext(args.out_dir)[0])
 
 
 for line in open(args.input_file, 'r'):
@@ -73,13 +77,13 @@ for name in graph:
 		 graph[name][contig].sort()
 		 graph[name][contig] = [graph[name][contig][i][1] for i in range(len(graph[name][contig]))]
 
-out_context = open('{name}/{name}_context.txt'.format(name=args.out_dir), 'w')
+out_context = open('{name}/{orgname}_context.txt'.format(name=args.out_dir, orgname=orgname), 'w')
 og_context = find_context(graph)
 for og in og_context:
 	out_context.write(og + '\t' + str(og_context[og]) + '\n')
 
 
-out = open('{name}/{name}.sif'.format(name=args.out_dir), 'w')
+out = open('{name}/{orgname}.sif'.format(name=args.out_dir, orgname=orgname), 'w')
 
 
 coord_list = {}
@@ -116,7 +120,7 @@ if args.coalign:
 
 
 print('Database filling...')
-db_ = sqlite3.connect('{name}/{name}'.format(name=args.out_dir) + '.db')
+db_ = sqlite3.connect('{name}/{orgname}'.format(name=args.out_dir, orgname=orgname) + '.db')
 
 c = db_.cursor()
 
@@ -200,7 +204,7 @@ for node in nodes_set:
 
 db_.commit()
 
-out_coord = open('{name}/{name}_genes.sif'.format(name=args.out_dir), 'w')
+out_coord = open('{name}/{orgname}_genes.sif'.format(name=args.out_dir, orgname=orgname), 'w')
 out_coord.write('genome\tcontig\tgene\tstart\tend\tdescription\n')
 
 genome_key = 0
@@ -329,7 +333,7 @@ for name in full_graph:
 
 
 
-out = open('{name}/{name}_pars.sif'.format(name=args.out_dir), 'w')
+out = open('{name}/{orgname}_pars.sif'.format(name=args.out_dir, orgname=orgname), 'w')
 
 
 edges = []
@@ -459,7 +463,7 @@ if args.coalign:
 
 print('Database filling...')
 
-db_ = sqlite3.connect('{name}/{name}_pars.db'.format(name=args.out_dir))
+db_ = sqlite3.connect('{name}/{orgname}_pars.db'.format(name=args.out_dir, orgname=orgname))
 c = db_.cursor()
 
 c.execute('drop table if exists genomes_table')
@@ -543,7 +547,7 @@ for node in nodes_set:
 
 db_.commit()
 
-out_coord = open('{name}/{name}_pars_genes.sif'.format(name=args.out_dir), 'w')
+out_coord = open('{name}/{orgname}_pars_genes.sif'.format(name=args.out_dir, orgname=orgname), 'w')
 out_coord.write('genome\tcontig\tgene\tstart\tend\tdescription\n')
 
 genome_key = 0
@@ -642,24 +646,24 @@ if '.dump' not in ' '.join(files):
 	
 	try:
 		g = GenomeGraph()
-		g.read_graph(org + '/' + org + '.sif')
-		dump_file = open(org + '/' + org + '.dump', 'wb')
+		g.read_graph(org + '/' + orgname + '.sif')
+		dump_file = open(org + '/' + orgname + '.dump', 'wb')
 		dump(g, dump_file)
 	except:
 		pass
 
 	try:
 		g = GenomeGraph()
-		g.read_graph(org + '/' + org + '_pars.sif')
-		dump_file = open(org + '/' + org + '_pars.dump', 'wb')
+		g.read_graph(org + '/' + orgname + '_pars.sif')
+		dump_file = open(org + '/' + orgname + '_pars.dump', 'wb')
 		dump(g, dump_file)
 	except:
 		pass
 
-	skip = os.path.isfile(org + '/' + org + '.db')
+	skip = os.path.isfile(org + '/' + orgname + '.db')
 
 	if skip == True:
-		connect = sqlite3.connect(org + '/' + org + '.db')
+		connect = sqlite3.connect(org + '/' + orgname + '.db')
 		c = connect.cursor()
 		
 		genome_codes = [q for q in c.execute('select genome_id,genome_code from genomes_table')]
@@ -674,11 +678,11 @@ if '.dump' not in ' '.join(files):
 		connect.close()
 
 	#pars table
-	skip = os.path.isfile( org + '/' + org + '_pars.db')
+	skip = os.path.isfile( org + '/' + orgname + '_pars.db')
 
 	if skip == True:
 			
-		connect = sqlite3.connect(org + '/' + org + '_pars.db')
+		connect = sqlite3.connect(org + '/' + orgname + '_pars.db')
 		c = connect.cursor()
 		
 		genome_codes = [q for q in c.execute('select genome_id,genome_code from genomes_table')]
@@ -709,12 +713,12 @@ else:
 graph = GenomeGraph()
 
 
-imput_file = '{name}/{name}.sif'.format(name=args.out_dir)
+imput_file = '{name}/{orgname}.sif'.format(name=args.out_dir, orgname=orgname)
 
 
 
 
-graph.read_graph('{name}/{name}.sif'.format(name=args.out_dir), names_list=args.genomes_list)
+graph.read_graph('{name}/{orgname}.sif'.format(name=args.out_dir, orgname=orgname), names_list=args.genomes_list)
 for reference in references_list:
 
     outdir = args.out_dir + '/{}'.format(reference.replace('/', '_'))
@@ -732,7 +736,7 @@ for reference in references_list:
         iterations=args.iterations, 
         min_depth=args.min_depth, 
         max_depth=args.max_depth, 
-        save_db='{name}/{name}.db'.format(name=args.out_dir)
+        save_db='{name}/{orgname}.db'.format(name=args.out_dir, orgname=orgname)
         )
 
 
