@@ -26,8 +26,11 @@ for line in open(args.input_file, 'r'):
 
 	stamms = string.split(' ')
 	for stamm in stamms:
-		name = stamm.split('|')[0]
-		start_coord = int(stamm.split('|')[-2])
+		try:
+			name = stamm.split('|')[0]
+			start_coord = int(stamm.split('|')[-2])
+		except IndexError:
+			continue
 		end_coord = int(stamm.split('|')[-1])
 		coord = int(stamm.split('|')[1])
 		description = stamm.split('|')[2]
@@ -208,17 +211,19 @@ for name in graph:
 				node_key += 1
 				continue
 			
-			first_coord = int(np.mean(coord_list[name][contig][i]))
-			second_coord = int(np.mean(coord_list[name][contig][i+1]))
+			first_start, first_end = coord_list[name][contig][i]
+			second_start, second_end = coord_list[name][contig][i+1]
 
 
-			line = '{first_gene} {second_gene} {genome} {contig} {first_coord} {second_coord}\n'.format(
+			line = '{first_gene} {second_gene} {genome} {contig} {first_start} {first_end} {second_start} {second_end}\n'.format(
 				first_gene=graph[name][contig][i],
 				second_gene=graph[name][contig][i+1],
 				genome=name,
 				contig=contig, 
-				first_coord=first_coord,
-				second_coord=second_coord
+				first_start=first_start,
+				first_end=first_end,
+				second_start=second_start,
+				second_end=second_end
 			)
 
 			out.write(line)
