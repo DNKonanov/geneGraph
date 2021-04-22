@@ -181,13 +181,15 @@ org = 0
 for new_array in base_genomes:
     
     for i in range(len(new_array) - 1):
-        out.write('OG{og1} OG{og2} org{org} contig{contig} {coord1} {coord2}\n'.format(
+        out.write('OG{og1} OG{og2} org{org} contig{contig} {coord1} {coord2} {coord3} {coord4}\n'.format(
             og1=new_array[i],
             og2=new_array[i+1],
             org=org,
             contig=org,
             coord1=i,
             coord2=i+1,
+            coord3=i+2,
+            coord4=i+3,
         ))
 
     org += 1
@@ -195,11 +197,13 @@ for new_array in base_genomes:
     
 ref = [i for i in range(5000)]
 for i in range(len(ref) - 1):
-    out.write('OG{og1} OG{og2} org_ref contig_ref {coord1} {coord2}\n'.format(
+    out.write('OG{og1} OG{og2} org_ref contig_ref {coord1} {coord2} {coord3} {coord4}\n'.format(
             og1=ref[i],
             og2=ref[i+1],
             coord1=i,
             coord2=i+1,
+            coord3=i+2,
+            coord4=i+3,
         ))
 
 
