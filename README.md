@@ -127,5 +127,5 @@ GCB_package does not contain pre-computed complexity profiles, but there are eas
 
 ## References
 
-Will be added
+Manolov, A., Konanov, D., Fedorov, D., Osmolovsky, I., Vereshchagin, R., & Ilina, E. (2020). [Genome Complexity Browser: Visualization and quantification of genome variability](https://doi.org/10.1371/journal.pcbi.1008222). PLoS computational biology, 16(10), e1008222. 
 
