@@ -5,16 +5,12 @@ Command-line tool for genome complexity computing
 ## Dependencies
 
 * Python 3.4 or later
-* Graphviz and pygraphviz libraries (Only required for `plot_subgraph.py`. It is known that this library has installation problems, so we mention that it is not required to create complexity profiles)
+* Graphviz and pygraphviz libraries (required only for subgraph plotting)
+    `conda install -c anaconda graphviz`
+    `conda install -c conda-forge pygraphviz==1.7`
 
-    Can be installed by
-    `sudo apt-get install graphviz python3-graphviz python3-pygraphviz` or by `conda install`
-
-
-* gene_graph_lib python3 module
-
-    Can be installed by  
-    `pip3 install gene_graph_lib`
+* python3 modules
+    `pip3 install -r requirements.txt`
 
 ## Usage
 
@@ -113,15 +109,15 @@ Additional parameters:
 
 ### Method validation
 
-To verify our method we implemented random rearrangements algorithm.
-You can carry out the validation pipeline by one command: just open `geneGraph/source/validation` folder and run `bash validate.sh` script in terminal. This short pipeline generates sinus-distribution based random rearrangements models and creates plot for input distribution and result complexity profile.
+To verify our method we implemented a random rearrangements algorithm.
+You can carry out the validation pipeline by one command: just open `geneGraph/source/validation` folder and run `bash validate.sh` script in terminal. This short pipeline generates sinus-distribution based random rearrangements models and creates the plot for the input distribution and the resulting complexity profile.
 
 
 ## Links
 
 This tool is available as a web-service [Genome Complexity Browser](http://gcb.rcpcm.org) ([link to github](https://github.com/DNKonanov/Genome-Complexity-Browser)) and as a stand-alone app [GCB package](https://github.com/DNKonanov/GCB).
 
-Genome Complexity Browser contains pre-computed complexity profiles and graph structure for more than 140 prokariotic species.
+Genome Complexity Browser contains pre-computed complexity profiles and the graph structure for more than 140 prokariotic species.
 
 GCB_package does not contain pre-computed complexity profiles, but there are easy-to-use scripts to add your own organisms in the package.
 
